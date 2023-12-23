@@ -1,0 +1,186 @@
+# swagger.yml
+
+openapi: 3.0.0
+info:
+  title: "RP Flask REST API"
+  description: "An API about people and movies"
+  version: "1.0.0"
+
+servers:
+  - url: "/api"
+
+components:
+  schemas:
+    Person:
+      type: "object"
+      required:
+        - lname
+      properties:
+        fname:
+          type: "string"
+        lname:
+          type: "string"
+
+    Movie:
+      type: "object"
+      required:
+        - movieName
+      properties:
+        movieName:
+          type: "string"
+        genre: 
+          type: "string"
+        yearReleased:
+          type: "integer"
+
+  parameters:
+    lname:  
+      name: "lname"
+      description: "Last name of the person to get"
+      in: path
+      required: True
+      schema:
+        type: "string"
+
+    movieName:  
+      name: "movieName"
+      description: "Name of movie to get"
+      in: path
+      required: True
+      schema:
+        type: "string"
+
+paths:
+  /people:
+    get:
+      operationId: "people.read_all"
+      tags:
+        - People
+      summary: "Read the list of people"
+      responses:
+        "200":
+          description: "Successfully read people list"    
+
+    post:
+      operationId: "people.create"
+      tags:
+        - People
+      summary: "Create a person"
+      requestBody:
+          description: "Person to create"
+          required: true
+          content:
+            application/json:
+              schema:
+                x-body-name: "person"
+                $ref: "#/components/schemas/Person"
+      responses:
+        "201":
+          description: "Successfully created person"
+
+  /people/{lname}:
+    get:
+      operationId: "people.read_one"        
+      tags: 
+        - People
+      summary: "Read one person"
+      parameters:
+        - $ref: "#/components/parameters/lname"
+      responses:
+        "200":
+          description: "Successfully read person"
+
+    put:
+      operationId: "people.update"
+      tags: 
+        - People
+      summary: "Update a person"
+      parameters:
+        - $ref: "#/components/parameters/lname"
+      responses:
+        "200": 
+          description: "Successfully updated a person"
+      requestBody:
+        content:  
+          application/json:
+            schema:
+              x-body-name: "person"
+              $ref: "#/components/schemas/Person"
+
+    delete:
+      tags:
+        - People
+      operationId: "people.delete"
+      summary: "Delete a person"
+      parameters:
+        - $ref: "#/components/parameters/lname"
+      responses:
+        "204":
+          description: "Successfully deleted person"
+
+  /movies:
+    get:
+      operationId: "movies.read_all"
+      tags:
+        - Movies
+      summary: "Read the list of movies"
+      responses:
+        "200":
+          description: "Successfully read movie list"
+    
+    post:
+      operationId: "movies.create"
+      tags:
+        - Movies
+      summary: "Create a movie"
+      requestBody:
+          description: "Movie to create"
+          required: True
+          content:
+            application/json:
+              schema:
+                x-body-name: "movie"
+                $ref: "#/components/schemas/Movie"
+      responses:
+        "201":
+          description: "Successfully created movie"
+  
+  /movies/{movieName}:
+    get:
+      operationId: "movies.read_one"        
+      tags: 
+        - Movies
+      summary: "Read one movie"
+      parameters:
+        - $ref: "#/components/parameters/movieName"
+      responses:
+        "200":
+          description: "Successfully read movie"
+
+    put:
+      tags: 
+        - Movies
+      operationId: "movies.update"
+      summary: "Update a movie"
+      parameters:
+        - $ref: "#/components/parameters/movieName"
+      responses:
+        "200": 
+          description: "Successfully updated a movie"
+      requestBody:
+        content:  
+          application/json:
+            schema:
+              x-body-name: "movie"
+              $ref: "#/components/schemas/Movie"
+
+    delete:
+      tags:
+        - Movies
+      operationId: "movies.delete"
+      summary: "Delete a movie"
+      parameters:
+        - $ref: "#/components/parameters/movieName"
+      responses:
+        "204":
+          description: "Successfully deleted movie"
